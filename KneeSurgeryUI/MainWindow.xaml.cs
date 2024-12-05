@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Text.Json;
+using System.Windows;
 
 namespace KneeSurgeryUI
 {
@@ -10,6 +12,14 @@ namespace KneeSurgeryUI
         public MainWindow()
         {
             InitializeComponent();
+            InitializeAsync();
+        }
+
+        private async void InitializeAsync()
+        {
+            await MonacoWebView.EnsureCoreWebView2Async(null);
+            string htmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MonacoEditor.html");
+            MonacoWebView.CoreWebView2.Navigate(new Uri(htmlPath).AbsoluteUri);
         }
 
         private void InitializeTest(object sender, RoutedEventArgs e)
@@ -40,9 +50,9 @@ namespace KneeSurgeryUI
             MessageBox.Show(result == 1 ? "Startup.test succeeded" : "Startup.test failed");
         }
 
-        private void ExecutionTest(object sender, RoutedEventArgs e)
+        private async void ExecutionTest(object sender, RoutedEventArgs e)
         {
-            int result = KneeSurgeryDll.KneeSurgery.Execution(text.Text);
+            int result = KneeSurgeryDll.KneeSurgery.Execution(JsonSerializer.Deserialize<string>(await MonacoWebView.ExecuteScriptAsync("window.editor.getValue();")));
 
             MessageBox.Show(result == 1 ? "Execution.test succeeded" : "Execution.test failed");
         }

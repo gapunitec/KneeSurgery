@@ -1,0 +1,56 @@
+﻿<Window x:Class="KneeSurgeryUI.MainWindowNew"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KneeSurgeryUI"
+        mc:Ignorable="d"
+        Title="KneeSurgeryUI" Height="450" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+    <Grid Background="White">
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.95*" />
+                <RowDefinition Height="0.05*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.7*" />
+                    <ColumnDefinition Width="0.3*" />
+                </Grid.ColumnDefinitions>
+                <wv2:WebView2 x:Name="MonacoWebView" Grid.Column="0" Margin="0,0,2.5,2.5" />
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.05*" />
+                        <RowDefinition Height="0.95*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Button Content="Clear" Grid.Column="0" Margin="5,0,0,2.5" FontSize="9" Click="Clear" />
+                        <Button Content="Open file" Grid.Column="1" Margin="5,0,0,2.5" FontSize="9" Click="OpenFile" />
+                        <Button Content="Open folder" Grid.Column="2" Margin="5,0,0,2.5" FontSize="9" Click="OpenFolder" />
+                    </Grid>
+                    <ListBox x:Name="ScriptList" Grid.Row="1" Margin="2.5,2.5,0,2.5" SelectionChanged="GetSelectedFile" />
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="0.5*" />
+                </Grid.ColumnDefinitions>
+                <Button Content="Inject" Grid.Column="0" Margin="0,2.5,5,0" FontSize="9" Click="Startup" />
+                <Button Content="Execute" Grid.Column="1" Margin="0,2.5,5,0" FontSize="9" Click="Execution" />
+                <Button Content="Open Logs folder" Grid.Column="2" Margin="0,2.5,5,0" FontSize="9" Click="OpenLogsFolder" />
+                <Button Content="Open Autoexec folder" Grid.Column="3" Margin="0,2.5,5,0" FontSize="9" Click="OpenAutoexecFolder" />
+                <Button Content="Kill Roblox" Grid.Column="4" Margin="0,2.5,5,0" FontSize="9" Click="KillRobloxPlayerBeta" />
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
