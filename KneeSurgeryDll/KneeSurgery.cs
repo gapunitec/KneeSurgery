@@ -231,5 +231,52 @@ namespace KneeSurgeryDll
                 return -1;
             }
         }
+
+        /// <summary>
+        /// Clean RobloxPlayerBeta.
+        /// </summary>
+        /// <returns>1 if successful, -1 if an error occurs.</returns>
+        public static int CleanRobloxPlayerBeta()
+        {
+            try
+            {
+                List<string> cmds = new List<string>
+                {
+                    "/c del /Q %systemdrive%\\Users\\%username%\\AppData\\LocalLow\\rbxcsettings.rbx",
+                    "/c del /Q %systemdrive%\\Users\\%username%\\AppData\\Local\\Roblox\\GlobalBasicSettings_13.xml",
+                    "/c del /Q %systemdrive%\\Users\\%username%\\AppData\\Local\\Roblox\\RobloxCookies.dat",
+                    "/c del /Q %systemdrive%\\Users\\%username%\\AppData\\Local\\Roblox\\frm.cfg",
+                    "/c del /Q %systemdrive%\\Users\\%username%\\AppData\\Local\\Roblox\\AnalysticsSettings.xml",
+                    "/c del /Q %systemdrive%\\Users\\%username%\\AppData\\Local\\Roblox\\LocalStorage\\*",
+                    "/c del /S /Q %systemdrive%\\Users\\%username%\\AppData\\Local\\Roblox\\logs\\*",
+                    "/c del /Q %temp%\\RBX-*.log",
+                    "/c del /S /Q %systemdrive%\\Windows\\Temp\\*",
+                    "/c del /S /Q %systemdrive%\\Users\\%username%\\AppData\\Local\\Microsoft\\CLR_v4.0_32\\UsageLogs\\*",
+                    "/c del /S /Q %systemdrive%\\Users\\%username%\\AppData\\Local\\Microsoft\\CLR_v4.0\\UsageLogs\\*"
+                };
+
+                foreach (string cmd in cmds)
+                {
+                    ProcessStartInfo processStartInfo = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        Arguments = cmd
+                    };
+
+                    using (Process process = Process.Start(processStartInfo))
+                    {
+                        process.WaitForExit();
+                    }
+                }
+
+                return 1;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
     }
 }

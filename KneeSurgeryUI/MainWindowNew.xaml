@@ -34,7 +34,14 @@
                         <Button Content="Open file" Grid.Column="1" Margin="5,0,0,2.5" FontSize="9" Click="OpenFile" />
                         <Button Content="Open folder" Grid.Column="2" Margin="5,0,0,2.5" FontSize="9" Click="OpenFolder" />
                     </Grid>
-                    <ListBox x:Name="ScriptList" Grid.Row="1" Margin="2.5,2.5,0,2.5" SelectionChanged="GetSelectedFile" />
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.7*" />
+                            <RowDefinition Height="0.3*" />
+                        </Grid.RowDefinitions>
+                        <ListBox x:Name="ScriptList" Grid.Row="0" Margin="2.5,2.5,0,2.5" SelectionChanged="GetSelectedFile" />
+                        <TextBox x:Name="Logs" Grid.Row="1" Margin="2.5,2.5,0,2.5" IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid Grid.Row="1">
@@ -44,12 +51,14 @@
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="0.5*" />
                 </Grid.ColumnDefinitions>
                 <Button Content="Inject" Grid.Column="0" Margin="0,2.5,5,0" FontSize="9" Click="Startup" />
                 <Button Content="Execute" Grid.Column="1" Margin="0,2.5,5,0" FontSize="9" Click="Execution" />
                 <Button Content="Open Logs folder" Grid.Column="2" Margin="0,2.5,5,0" FontSize="9" Click="OpenLogsFolder" />
                 <Button Content="Open Autoexec folder" Grid.Column="3" Margin="0,2.5,5,0" FontSize="9" Click="OpenAutoexecFolder" />
                 <Button Content="Kill Roblox" Grid.Column="4" Margin="0,2.5,5,0" FontSize="9" Click="KillRobloxPlayerBeta" />
+                <Button Content="Clean Roblox" Grid.Column="5" Margin="0,2.5,5,0" FontSize="9" Click="CleanRobloxPlayerBeta" />
             </Grid>
         </Grid>
     </Grid>
