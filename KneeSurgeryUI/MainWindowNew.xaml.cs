@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
@@ -12,8 +13,9 @@ namespace KneeSurgeryUI
     /// </summary>
     public partial class MainWindowNew : Window
     {
-        private ObservableCollection<string> scripts = new ObservableCollection<string>();
-        private string scriptsFolder = String.Empty;
+        private const string CurrentVersion = "1.0.7.0";
+        private ObservableCollection<string> _scripts = new ObservableCollection<string>();
+        private string _scriptsFolder = String.Empty;
         private FileSystemWatcher _fileWatcher;
         private readonly string _filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "sirhurt", "sirhui", "sirh_debug_log.dat");
         private readonly SynchronizationContext _syncContext;
@@ -21,13 +23,19 @@ namespace KneeSurgeryUI
         public MainWindowNew()
         {
             InitializeComponent();
+
             _syncContext = SynchronizationContext.Current;
+
             InitializeFileWatcher();
             LoadFileContent();
             InitializeAsync();
 
-            ScriptList.ItemsSource = scripts;
+            ScriptList.ItemsSource = _scripts;
+
             GetFiles(AppDomain.CurrentDomain.BaseDirectory);
+
+            Logs.ScrollToEnd();
+            _ = CheckForUpdatesAsync();
         }
 
         private void InitializeFileWatcher()
@@ -132,6 +140,19 @@ namespace KneeSurgeryUI
         private void Startup(object sender, RoutedEventArgs e)
         {
             int result = KneeSurgeryDll.KneeSurgery.Startup();
+
+            if (result == 1)
+            {
+                MessageBox.Show("SirHurt has been successfully injected.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else if (result == -1)
+            {
+                MessageBox.Show("Error injecting SirHurt.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show($"Unexpected result code: {result}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private async void Execution(object sender, RoutedEventArgs e)
@@ -193,6 +214,26 @@ namespace KneeSurgeryUI
             Title = "KneeSurgeryUI";
         }
 
+        private async void Save(object sender, RoutedEventArgs e)
+        {
+            string text = JsonSerializer.Deserialize<string>(await MonacoWebView.ExecuteScriptAsync("window.editor.getValue();"));
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Title = "Save",
+                Filter = "Lua Files (*.lua)|*.lua",
+                InitialDirectory = AppDomain.CurrentDomain.BaseDirectory
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                await File.WriteAllTextAsync(saveFileDialog.FileName, text);
+
+                ScriptList.SelectedItem = null;
+                Title = $"KneeSurgeryUI - {saveFileDialog.FileName}";
+            }
+        }
+
         private async void OpenFile(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -233,7 +274,7 @@ namespace KneeSurgeryUI
         {
             if (ScriptList.SelectedItem != null)
             {
-                string path = Path.Combine(scriptsFolder, ScriptList.SelectedItem.ToString());
+                string path = Path.Combine(_scriptsFolder, ScriptList.SelectedItem.ToString());
 
                 string fileContent = File.ReadAllText(path, System.Text.Encoding.UTF8);
 
@@ -245,14 +286,85 @@ namespace KneeSurgeryUI
 
         private void GetFiles(string path)
         {
-            scripts.Clear();
+            _scripts.Clear();
 
             foreach (string file in Directory.GetFiles(path, "*lua", SearchOption.TopDirectoryOnly))
             {
-                scripts.Add(Path.GetFileName(file));
+                _scripts.Add(Path.GetFileName(file));
             }
 
-            scriptsFolder = path;
+            _scriptsFolder = path;
+        }
+
+        private async Task CheckForUpdatesAsync()
+        {
+            string latestVersion = await GetLatestVersionAsync();
+
+            if (Version.TryParse(CurrentVersion, out Version current) && Version.TryParse(latestVersion, out Version latest))
+            {
+                if (latest > current)
+                {
+                    MessageBoxResult result = MessageBox.Show(
+                        $"A new version ({latestVersion}) is available. Would you like to download it?",
+                        "Update Available",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        string releaseUrl = $"https://github.com/gapunitec/KneeSurgery/releases/tag/{latestVersion}";
+
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                        {
+                            FileName = releaseUrl,
+                            UseShellExecute = true
+                        });
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("The application is up to date.", "No Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Unable to verify the application version.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private async Task<string> GetLatestVersionAsync()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string apiUrl = "https://api.github.com/repos/gapunitec/KneeSurgery/releases/latest";
+
+                    client.DefaultRequestHeaders.Add("User-Agent", "C# App");
+
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                    response.EnsureSuccessStatusCode();
+
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                    using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
+                    {
+                        JsonElement root = doc.RootElement;
+                        string latestVersion = root.GetProperty("tag_name").GetString();
+
+                        latestVersion = latestVersion.TrimStart('v', 'V');
+
+                        return latestVersion;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error fetching version: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                return CurrentVersion;
+            }
         }
     }
 }
