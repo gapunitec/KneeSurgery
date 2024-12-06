@@ -7,6 +7,8 @@ namespace KneeSurgeryDll.Services
         private static Dictionary<string, string> _ksfs = new Dictionary<string, string>
         {
             { "Test1()", "print(\"This is a Knee Surgery Function (ksf)!\")" },
+            { "IY()", "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source\"))()" },
+            { "Orca()", "loadstring(game:HttpGetAsync(\"https://raw.githubusercontent.com/richie0866/orca/master/public/latest.lua\"))()" }
         };
 
         public static string KsfConverter(string ksf)
@@ -27,7 +29,7 @@ namespace KneeSurgeryDll.Services
             });
         }
 
-        static IEnumerable<string> GetEscapedKeys(IEnumerable<string> keys)
+        private static IEnumerable<string> GetEscapedKeys(IEnumerable<string> keys)
         {
             foreach (var key in keys)
             {

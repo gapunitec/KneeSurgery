@@ -18,14 +18,17 @@
 <body>
     <div id="editor"></div>
     <script>
-        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs' }});
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs' } });
         require(['vs/editor/editor.main'], function () {
             window.editor = monaco.editor.create(document.getElementById('editor'), {
                 value: "-- Write your Lua code here\nprint('Hello, world!')",
                 language: 'lua',
                 fontSize: '12px',
                 theme: 'vs-dark',
-                automaticLayout: true
+                automaticLayout: true,
+                cursorBlinking: 'smooth',
+                cursorSmoothCaretAnimation: true,
+                smoothScrolling: true
             });
         });
     </script>
