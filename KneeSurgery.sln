@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KneeSurgeryDll", "KneeSurgeryDll\KneeSurgeryDll.csproj", "{38DC5FEA-E5B3-4533-9795-6BDC7ECE8671}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KneeSurgeryUI", "KneeSurgeryUI\KneeSurgeryUI.csproj", "{B54B02F5-3DA3-455D-8F05-751C6C13734C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SirHurtCleaner", "SirHurtCleaner\SirHurtCleaner.csproj", "{8C28AF8B-E65F-4A3E-9E1E-688851E9FBDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{B54B02F5-3DA3-455D-8F05-751C6C13734C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B54B02F5-3DA3-455D-8F05-751C6C13734C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B54B02F5-3DA3-455D-8F05-751C6C13734C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C28AF8B-E65F-4A3E-9E1E-688851E9FBDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C28AF8B-E65F-4A3E-9E1E-688851E9FBDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C28AF8B-E65F-4A3E-9E1E-688851E9FBDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C28AF8B-E65F-4A3E-9E1E-688851E9FBDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
