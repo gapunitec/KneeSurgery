@@ -13,7 +13,7 @@ namespace KneeSurgeryUI
     /// </summary>
     public partial class MainWindowNew : Window
     {
-        private const string CurrentVersion = "1.0.7.1";
+        private const string CurrentVersion = "1.0.7.2";
         private ObservableCollection<string> _scripts = new ObservableCollection<string>();
         private string _scriptsFolder = String.Empty;
         private FileSystemWatcher _fileWatcher;
@@ -40,22 +40,29 @@ namespace KneeSurgeryUI
 
         private void InitializeFileWatcher()
         {
-            string directoryName = Path.GetDirectoryName(_filePath);
-            string fileName = Path.GetFileName(_filePath);
-
-            _fileWatcher = new FileSystemWatcher
+            try
             {
-                Path = directoryName,
-                Filter = fileName,
-                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Size
-            };
+                string directoryName = Path.GetDirectoryName(_filePath);
+                string fileName = Path.GetFileName(_filePath);
 
-            _fileWatcher.Changed += OnFileChanged;
-            _fileWatcher.Created += OnFileChanged;
-            _fileWatcher.Deleted += OnFileDeleted;
-            _fileWatcher.Renamed += OnFileRenamed;
+                _fileWatcher = new FileSystemWatcher
+                {
+                    Path = directoryName,
+                    Filter = fileName,
+                    NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Size
+                };
 
-            _fileWatcher.EnableRaisingEvents = true;
+                _fileWatcher.Changed += OnFileChanged;
+                _fileWatcher.Created += OnFileChanged;
+                _fileWatcher.Deleted += OnFileDeleted;
+                _fileWatcher.Renamed += OnFileRenamed;
+
+                _fileWatcher.EnableRaisingEvents = true;
+            }
+            catch
+            {
+                Logs.Visibility = Visibility.Hidden;
+            }
         }
 
         private void OnFileChanged(object sender, FileSystemEventArgs e)
