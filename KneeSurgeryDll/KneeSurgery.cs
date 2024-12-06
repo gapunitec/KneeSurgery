@@ -158,7 +158,7 @@ namespace KneeSurgeryDll
                 if (!Directory.Exists(sirhurtDatParentPath))
                     Directory.CreateDirectory(sirhurtDatParentPath);
 
-                File.WriteAllText(sirhurtDatPath, text);
+                File.WriteAllText(sirhurtDatPath, KsfService.KsfConverter(text));
 
                 return 1;
             }

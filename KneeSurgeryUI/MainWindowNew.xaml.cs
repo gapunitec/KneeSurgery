@@ -13,7 +13,7 @@ namespace KneeSurgeryUI
     /// </summary>
     public partial class MainWindowNew : Window
     {
-        private const string CurrentVersion = "1.0.7.0";
+        private const string CurrentVersion = "1.0.7.1";
         private ObservableCollection<string> _scripts = new ObservableCollection<string>();
         private string _scriptsFolder = String.Empty;
         private FileSystemWatcher _fileWatcher;
