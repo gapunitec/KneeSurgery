@@ -148,6 +148,17 @@ namespace KneeSurgeryUI
             await MonacoWebView.EnsureCoreWebView2Async(null);
             string htmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MonacoEditor.html");
             MonacoWebView.CoreWebView2.Navigate(new Uri(htmlPath).AbsoluteUri);
+
+            if (_settings.MonacoEditorText != null)
+            {
+                await MonacoWebView.ExecuteScriptAsync($"window.editor.setValue({JsonSerializer.Serialize($"{_settings.MonacoEditorText}")})");
+            }
+            else
+            {
+                _settings.MonacoEditorText = JsonSerializer.Deserialize<string>(await MonacoWebView.ExecuteScriptAsync("window.editor.getValue();"));
+
+                _settings.SetSettings();
+            }
         }
 
         private void Startup(object sender, RoutedEventArgs e)
@@ -171,6 +182,9 @@ namespace KneeSurgeryUI
         private async void Execution(object sender, RoutedEventArgs e)
         {
             int result = KneeSurgeryDll.KneeSurgery.Execution(JsonSerializer.Deserialize<string>(await MonacoWebView.ExecuteScriptAsync("window.editor.getValue();")));
+            _settings.MonacoEditorText = JsonSerializer.Deserialize<string>(await MonacoWebView.ExecuteScriptAsync("window.editor.getValue();"));
+
+            _settings.SetSettings();
         }
 
         private void OpenLogsFolder(object sender, RoutedEventArgs e)
@@ -339,7 +353,7 @@ namespace KneeSurgeryUI
                 ExecuteButton.Foreground = selectedTheme.Foreground;
                 ExecuteButton.Background = selectedTheme.Background;
                 OpenLogsFolderButton.Foreground = selectedTheme.Foreground;
-                OpenLogsFolderButton.Background= selectedTheme.Background;
+                OpenLogsFolderButton.Background = selectedTheme.Background;
                 OpenAutoexecFolderButton.Foreground = selectedTheme.Foreground;
                 OpenAutoexecFolderButton.Background = selectedTheme.Background;
                 KillRobloxButton.Foreground = selectedTheme.Foreground;

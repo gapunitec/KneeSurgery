@@ -7,6 +7,7 @@ namespace KneeSurgeryUI
     public class Settings
     {
         public string ExplorerPath { get; set; }
+        public string MonacoEditorText { get; set; }
         public Theme SelectedTheme { get; set; }
         public List<Theme> Themes { get; set; }
 
