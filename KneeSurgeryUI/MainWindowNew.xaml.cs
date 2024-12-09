@@ -13,7 +13,7 @@ namespace KneeSurgeryUI
     /// </summary>
     public partial class MainWindowNew : Window
     {
-        private const string CurrentVersion = "1.0.9.1";
+        private const string CurrentVersion = "1.0.9.2";
         private Settings _settings = Settings.GetSettings();
         private ObservableCollection<string> _scripts = new ObservableCollection<string>();
         private ObservableCollection<string> _themes = new ObservableCollection<string>();
@@ -40,7 +40,6 @@ namespace KneeSurgeryUI
 
             ThemeList.SelectedItem = _settings.SelectedTheme.Name;
 
-            Logs.ScrollToEnd();
             _ = CheckForUpdatesAsync();
         }
 
@@ -148,17 +147,6 @@ namespace KneeSurgeryUI
             await MonacoWebView.EnsureCoreWebView2Async(null);
             string htmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MonacoEditor.html");
             MonacoWebView.CoreWebView2.Navigate(new Uri(htmlPath).AbsoluteUri);
-
-            if (_settings.MonacoEditorText != null)
-            {
-                await MonacoWebView.ExecuteScriptAsync($"window.editor.setValue({JsonSerializer.Serialize($"{_settings.MonacoEditorText}")})");
-            }
-            else
-            {
-                _settings.MonacoEditorText = JsonSerializer.Deserialize<string>(await MonacoWebView.ExecuteScriptAsync("window.editor.getValue();"));
-
-                _settings.SetSettings();
-            }
         }
 
         private void Startup(object sender, RoutedEventArgs e)
@@ -420,6 +408,19 @@ namespace KneeSurgeryUI
                 {
                     MessageBox.Show("The application is up to date.", "No Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+
+                if (_settings.MonacoEditorText != null)
+                {
+                    await MonacoWebView.ExecuteScriptAsync($"window.editor.setValue({JsonSerializer.Serialize($"{_settings.MonacoEditorText}")})");
+                }
+                else
+                {
+                    _settings.MonacoEditorText = JsonSerializer.Deserialize<string>(await MonacoWebView.ExecuteScriptAsync("window.editor.getValue();"));
+
+                    _settings.SetSettings();
+                }
+
+                Logs.ScrollToEnd();
             }
             else
             {
