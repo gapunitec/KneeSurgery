@@ -1,7 +1,7 @@
 # KneeSurgery
-![UI](https://i.imghippo.com/files/dWFC2773fts.PNG)
+![UI](https://i.imghippo.com/files/evja8088JxU.PNG)
 ## Configuration
-- Download KneeSurgeryDll.dll from the [releases](https://github.com/gapunitec/KneeSurgery/releases/) page
+- Download KneeSurgeryDll_X.X.X.X.zip from the [releases](https://github.com/gapunitec/KneeSurgery/releases/) page
 - Create or open your solution in Visual Studio
 - Right-click on References
 - Left-click on Add reference...
