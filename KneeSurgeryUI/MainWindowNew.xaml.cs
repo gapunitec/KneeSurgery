@@ -13,8 +13,10 @@ namespace KneeSurgeryUI
     /// </summary>
     public partial class MainWindowNew : Window
     {
-        private const string CurrentVersion = "1.0.8.0";
+        private const string CurrentVersion = "1.0.9.0";
+        private Settings _settings = Settings.GetSettings();
         private ObservableCollection<string> _scripts = new ObservableCollection<string>();
+        private ObservableCollection<string> _themes = new ObservableCollection<string>();
         private string _scriptsFolder = String.Empty;
         private FileSystemWatcher _fileWatcher;
         private readonly string _filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "sirhurt", "sirhui", "sirh_debug_log.dat");
@@ -31,8 +33,12 @@ namespace KneeSurgeryUI
             InitializeAsync();
 
             ScriptList.ItemsSource = _scripts;
+            ThemeList.ItemsSource = _themes;
 
-            GetFiles(AppDomain.CurrentDomain.BaseDirectory);
+            GetFiles(_settings.ExplorerPath ?? AppDomain.CurrentDomain.BaseDirectory);
+            GetThemes();
+
+            ThemeList.SelectedItem = _settings.SelectedTheme.Name;
 
             Logs.ScrollToEnd();
             _ = CheckForUpdatesAsync();
@@ -277,6 +283,20 @@ namespace KneeSurgeryUI
             }
         }
 
+        private void Themes(object sender, RoutedEventArgs e)
+        {
+            if (ThemeList.Visibility == Visibility.Visible)
+            {
+                ThemeList.Visibility = Visibility.Hidden;
+                ThemesButton.Content = "Themes";
+            }
+            else
+            {
+                ThemeList.Visibility = Visibility.Visible;
+                ThemesButton.Content = "Explorer";
+            }
+        }
+
         private async void GetSelectedFile(object sender, RoutedEventArgs e)
         {
             if (ScriptList.SelectedItem != null)
@@ -291,6 +311,47 @@ namespace KneeSurgeryUI
             }
         }
 
+        private void GetSelectedTheme(object sender, RoutedEventArgs e)
+        {
+            if (ThemeList.SelectedItem != null)
+            {
+                Theme selectedTheme = _settings.Themes.FirstOrDefault(x => x.Name == ThemeList.SelectedItem.ToString());
+
+                MainGrid.Background = selectedTheme.MainBackground;
+                ClearButton.Foreground = selectedTheme.Foreground;
+                ClearButton.Background = selectedTheme.Background;
+                SaveButton.Foreground = selectedTheme.Foreground;
+                SaveButton.Background = selectedTheme.Background;
+                OpenFileButton.Foreground = selectedTheme.Foreground;
+                OpenFileButton.Background = selectedTheme.Background;
+                OpenFolderButton.Foreground = selectedTheme.Foreground;
+                OpenFolderButton.Background = selectedTheme.Background;
+                ThemesButton.Foreground = selectedTheme.Foreground;
+                ThemesButton.Background = selectedTheme.Background;
+                ScriptList.Foreground = selectedTheme.Foreground;
+                ScriptList.Background = selectedTheme.Background;
+                ThemeList.Foreground = selectedTheme.Foreground;
+                ThemeList.Background = selectedTheme.Background;
+                Logs.Foreground = selectedTheme.Foreground;
+                Logs.Background = selectedTheme.Background;
+                InjectButton.Foreground = selectedTheme.Foreground;
+                InjectButton.Background = selectedTheme.Background;
+                ExecuteButton.Foreground = selectedTheme.Foreground;
+                ExecuteButton.Background = selectedTheme.Background;
+                OpenLogsFolderButton.Foreground = selectedTheme.Foreground;
+                OpenLogsFolderButton.Background= selectedTheme.Background;
+                OpenAutoexecFolderButton.Foreground = selectedTheme.Foreground;
+                OpenAutoexecFolderButton.Background = selectedTheme.Background;
+                KillRobloxButton.Foreground = selectedTheme.Foreground;
+                KillRobloxButton.Background = selectedTheme.Background;
+                CleanRobloxButton.Foreground = selectedTheme.Foreground;
+                CleanRobloxButton.Background = selectedTheme.Background;
+
+                _settings.SelectedTheme = selectedTheme;
+                _settings.SetSettings();
+            }
+        }
+
         private void GetFiles(string path)
         {
             _scripts.Clear();
@@ -301,6 +362,19 @@ namespace KneeSurgeryUI
             }
 
             _scriptsFolder = path;
+            _settings.ExplorerPath = path;
+
+            _settings.SetSettings();
+        }
+
+        private void GetThemes()
+        {
+            _themes.Clear();
+
+            foreach (Theme theme in _settings.Themes)
+            {
+                _themes.Add(theme.Name);
+            }
         }
 
         private async Task CheckForUpdatesAsync()
