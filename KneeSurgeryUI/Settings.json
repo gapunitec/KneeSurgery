@@ -1,0 +1,19 @@
+{
+    "ExplorerPath": null,
+    "SelectedTheme": {
+        "Name": "Dark",
+        "Description": "Dark theme",
+        "Foreground": "#FFFFFF",
+        "Background": "#1f1f1f",
+        "MainBackground": "#181818"
+    },
+    "Themes": [
+        {
+            "Name": "Dark",
+            "Description": "Dark theme",
+            "Foreground": "#FFFFFF",
+            "Background": "#1f1f1f",
+            "MainBackground": "#181818"
+        }
+    ]
+}
