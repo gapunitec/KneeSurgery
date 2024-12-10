@@ -1,7 +1,7 @@
 # KneeSurgery
 ## UI preview
-![UI](https://i.imghippo.com/files/ovkm1671OI.PNG)
-![UI1](https://i.imghippo.com/files/BFb1432CeM.PNG)
+![UI](https://i.imghippo.com/files/hgn3365tQk.PNG)
+![UI1](https://i.imghippo.com/files/hgNz9646Gs.PNG)
 ## Dll configuration
 - Download KneeSurgeryDll_X.X.X.X.zip from the [releases](https://github.com/gapunitec/KneeSurgery/releases/) page
 - Create or open your solution in Visual Studio
