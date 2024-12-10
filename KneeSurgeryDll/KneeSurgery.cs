@@ -294,7 +294,7 @@ namespace KneeSurgeryDll
             {
                 foreach (Process process in Process.GetProcesses())
                 {
-                    if (process.ProcessName.Contains("cmd"))
+                    if (process.ProcessName.Contains("RobloxPlayerBeta"))
                     {
                         process.WaitForExit();
 
