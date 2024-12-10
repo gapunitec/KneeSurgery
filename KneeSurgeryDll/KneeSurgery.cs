@@ -278,5 +278,36 @@ namespace KneeSurgeryDll
                 return -1;
             }
         }
+
+        /// <summary>
+        /// Checks the injection state by looking for running processes containing "RobloxPlayerBeta".
+        /// </summary>
+        /// <returns>
+        /// A Task that resolves to:
+        /// - 1 if a relevant process is found and has exited,
+        /// - 0 if no relevant process is found,
+        /// - -1 if an error occurs.
+        /// </returns>
+        public static Task<int> GetInjectionState()
+        {
+            try
+            {
+                foreach (Process process in Process.GetProcesses())
+                {
+                    if (process.ProcessName.Contains("cmd"))
+                    {
+                        process.WaitForExit();
+
+                        return Task.FromResult(1);
+                    }
+                }
+
+                return Task.FromResult(0);
+            }
+            catch
+            {
+                return Task.FromResult(-1);
+            }
+        }
     }
 }

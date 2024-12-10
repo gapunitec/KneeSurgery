@@ -1,13 +1,15 @@
 # KneeSurgery
-![UI](https://i.imghippo.com/files/evja8088JxU.PNG)
-## Configuration
+## UI preview
+![UI](https://i.imghippo.com/files/ovkm1671OI.PNG)
+![UI1](https://i.imghippo.com/files/BFb1432CeM.PNG)
+## Dll configuration
 - Download KneeSurgeryDll_X.X.X.X.zip from the [releases](https://github.com/gapunitec/KneeSurgery/releases/) page
 - Create or open your solution in Visual Studio
 - Right-click on References
 - Left-click on Add reference...
 - At the bottom right left-click the Browse... button
 - Add KneeSurgeryDll.dll
-## Usage
+## Dll usage
 - ### int Initialize(string path = null)
 ```csharp
         //SOURCE
@@ -362,4 +364,44 @@
         //USAGE
 
         int result = KneeSurgeryDll.KneeSurgery.KillRobloxPlayerBeta()
+```
+- ### Task<int> GetInjectionState()
+```csharp
+        //SOURCE
+
+        /// <summary>
+        /// Checks the injection state by looking for running processes containing "RobloxPlayerBeta".
+        /// </summary>
+        /// <returns>
+        /// A Task that resolves to:
+        /// - 1 if a relevant process is found and has exited,
+        /// - 0 if no relevant process is found,
+        /// - -1 if an error occurs.
+        /// </returns>
+        public static Task<int> GetInjectionState()
+        {
+            try
+            {
+                foreach (Process process in Process.GetProcesses())
+                {
+                    if (process.ProcessName.Contains("cmd"))
+                    {
+                        process.WaitForExit();
+
+                        return Task.FromResult(1);
+                    }
+                }
+
+                return Task.FromResult(0);
+            }
+            catch
+            {
+                return Task.FromResult(-1);
+            }
+        }
+
+
+        //USAGE
+
+        int result = await Task.Run(() => KneeSurgeryDll.KneeSurgery.GetInjectionState())
 ```

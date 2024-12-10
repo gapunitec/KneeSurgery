@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Media;
 using Microsoft.Win32;
 
 namespace KneeSurgeryUI
@@ -13,7 +14,7 @@ namespace KneeSurgeryUI
     /// </summary>
     public partial class MainWindowNew : Window
     {
-        private const string CurrentVersion = "1.0.9.3";
+        private const string CurrentVersion = "1.0.10.0";
         private Settings _settings = Settings.GetSettings();
         private ObservableCollection<string> _scripts = new ObservableCollection<string>();
         private ObservableCollection<string> _themes = new ObservableCollection<string>();
@@ -149,13 +150,15 @@ namespace KneeSurgeryUI
             MonacoWebView.CoreWebView2.Navigate(new Uri(htmlPath).AbsoluteUri);
         }
 
-        private void Startup(object sender, RoutedEventArgs e)
+        private async void Startup(object sender, RoutedEventArgs e)
         {
             int result = KneeSurgeryDll.KneeSurgery.Startup();
 
             if (result == 1)
             {
                 MessageBox.Show("SirHurt has been successfully injected.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                await InjectionState();
             }
             else if (result == -1)
             {
@@ -164,6 +167,22 @@ namespace KneeSurgeryUI
             else
             {
                 MessageBox.Show($"Unexpected result code: {result}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private async Task InjectionState()
+        {
+            State.Background = Brushes.Green;
+
+            int result = await Task.Run(() => KneeSurgeryDll.KneeSurgery.GetInjectionState());
+
+            if (result == 1)
+            {
+                State.Background = Brushes.Red;
+            }
+            else
+            {
+                State.Background = Brushes.Red;
             }
         }
 
