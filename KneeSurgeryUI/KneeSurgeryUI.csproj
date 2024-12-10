@@ -11,12 +11,15 @@
 
   <ItemGroup>
     <None Remove="MonacoEditor.html" />
+    <None Remove="Resources\ico.ico" />
+    <None Remove="Resources\Madotsuki_Sitting_Small.gif" />
     <None Remove="Settings.json" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +33,11 @@
     <Content Include="Settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\ico.ico" />
+    <Resource Include="Resources\Madotsuki_Sitting_Small.gif" />
   </ItemGroup>
 
 </Project>
