@@ -14,7 +14,7 @@ namespace KneeSurgeryUI
     /// </summary>
     public partial class MainWindowNew : Window
     {
-        private const string CurrentVersion = "1.0.12.0";
+        private const string CurrentVersion = "1.0.13.0";
         private Settings _settings = Settings.GetSettings();
         private ObservableCollection<string> _scripts = new ObservableCollection<string>();
         private ObservableCollection<string> _themes = new ObservableCollection<string>();
@@ -179,17 +179,20 @@ namespace KneeSurgeryUI
         private async Task InjectionState()
         {
             State.Background = Brushes.Green;
+            GridLength tmp = InjectColumn.Width;
+            InjectColumn.Width = ExecuteColumn.Width;
+            ExecuteColumn.Width = tmp;
+            InjectButton.IsEnabled = false;
+            ExecuteButton.IsEnabled = true;
 
-            int result = await Task.Run(() => KneeSurgeryDll.KneeSurgery.GetInjectionState());
+            await Task.Run(() => KneeSurgeryDll.KneeSurgery.GetInjectionState());
 
-            if (result == 1)
-            {
-                State.Background = Brushes.Red;
-            }
-            else
-            {
-                State.Background = Brushes.Red;
-            }
+            State.Background = Brushes.Red;
+            tmp = InjectColumn.Width;
+            InjectColumn.Width = ExecuteColumn.Width;
+            ExecuteColumn.Width = tmp;
+            InjectButton.IsEnabled = true;
+            ExecuteButton.IsEnabled = false;
         }
 
         private async void Execution(object sender, RoutedEventArgs e)
