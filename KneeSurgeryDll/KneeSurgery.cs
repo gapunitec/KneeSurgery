@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Management;
 using System.Runtime.InteropServices;
 using KneeSurgeryDll.Services;
 
@@ -6,7 +7,8 @@ namespace KneeSurgeryDll
 {
     public static class KneeSurgery
     {
-        private const string CurrentVersion = "1.0.11.0";
+        private const string CurrentVersion = "1.0.12.0";
+        public static bool AutoInjectionActive { get; set; } = false;
 
         /// <summary>
         /// Initializes the KneeSurgery environment by creating necessary directories.
@@ -58,6 +60,50 @@ namespace KneeSurgeryDll
             catch
             {
                 return -1;
+            }
+        }
+
+        /// <summary>
+        /// Starts a WMI listener for process startup events. If the "RobloxPlayerBeta" process starts,
+        /// it executes the Startup() function and returns its result.
+        /// </summary>
+        /// <returns>
+        /// A Task containing:
+        /// - The result of the Startup() function if the "RobloxPlayerBeta" process is detected.
+        /// - 0 if AutoInjectionActive is false.
+        /// - -1 in case of exceptions.
+        /// </returns>
+        public static Task<int> AutoInjection()
+        {
+            try
+            {
+                if (AutoInjectionActive == true)
+                {
+                    TaskCompletionSource<int> tcs = new TaskCompletionSource<int>();
+                    WqlEventQuery query = new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace");
+                    ManagementEventWatcher watcher = new ManagementEventWatcher(query);
+
+                    watcher.EventArrived += (sender, e) =>
+                    {
+                        string processName = (string)e.NewEvent["ProcessName"];
+
+                        if (processName.Contains("RobloxPlayerBeta"))
+                        {
+                            tcs.TrySetResult(Startup());
+                            watcher.Stop();
+                        }
+                    };
+
+                    watcher.Start();
+
+                    return tcs.Task;
+                }
+
+                return Task.FromResult(0);
+            }
+            catch
+            {
+                return Task.FromResult(-1);
             }
         }
 
