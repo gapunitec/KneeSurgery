@@ -1,11 +1,13 @@
-﻿using KneeSurgeryDll.Services;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
+using KneeSurgeryDll.Services;
 
 namespace KneeSurgeryDll
 {
     public static class KneeSurgery
     {
+        private const string CurrentVersion = "1.0.11.0";
+
         /// <summary>
         /// Initializes the KneeSurgery environment by creating necessary directories.
         /// </summary>
@@ -79,7 +81,16 @@ namespace KneeSurgeryDll
                 {
                     sirhurt.WaitForExit();
 
-                    return sirhurt.ExitCode == 0 ? 1 : -1;
+                    if (sirhurt.ExitCode == 0)
+                    {
+                        Execution("game:GetService(\"StarterGui\"):SetCore(\"SendNotification\", {\nTitle = \"Knee Surgery Dll\",\nText = \"SirHurt has been successfully injected.\",\nDuration = 10\n})");
+
+                        return 1;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
                 }
             }
             catch
@@ -307,6 +318,22 @@ namespace KneeSurgeryDll
             catch
             {
                 return Task.FromResult(-1);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the current version of the dll.
+        /// </summary>
+        /// <returns>The current version as a string, or null if an error occurs.</returns>
+        public static string GetCurrentVersion()
+        {
+            try
+            {
+                return CurrentVersion;
+            }
+            catch
+            {
+                return null;
             }
         }
     }

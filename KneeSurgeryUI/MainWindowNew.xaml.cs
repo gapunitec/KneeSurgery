@@ -14,7 +14,7 @@ namespace KneeSurgeryUI
     /// </summary>
     public partial class MainWindowNew : Window
     {
-        private const string CurrentVersion = "1.0.10.3";
+        private const string CurrentVersion = "1.0.11.0";
         private Settings _settings = Settings.GetSettings();
         private ObservableCollection<string> _scripts = new ObservableCollection<string>();
         private ObservableCollection<string> _themes = new ObservableCollection<string>();
@@ -132,20 +132,20 @@ namespace KneeSurgeryUI
             throw new IOException("Failed to read the file after multiple attempts.");
         }
 
-        protected async override void OnClosed(EventArgs e)
+        protected override async void OnClosed(EventArgs e)
         {
+            if (_settings != null)
+            {
+                _settings.MonacoEditorText = JsonSerializer.Deserialize<string>(await MonacoWebView.ExecuteScriptAsync("window.editor.getValue();"));
+                _settings.SetSettings();
+            }
+
             base.OnClosed(e);
 
             if (_fileWatcher != null)
             {
                 _fileWatcher.EnableRaisingEvents = false;
                 _fileWatcher.Dispose();
-            }
-
-            if (_settings != null)
-            {
-                _settings.MonacoEditorText = JsonSerializer.Deserialize<string>(await MonacoWebView.ExecuteScriptAsync("window.editor.getValue();"));
-                _settings.SetSettings();
             }
         }
 

@@ -405,3 +405,28 @@
 
         int result = await Task.Run(() => KneeSurgeryDll.KneeSurgery.GetInjectionState())
 ```
+- ### string GetCurrentVersion()
+```csharp
+        //SOURCE
+
+        /// <summary>
+        /// Retrieves the current version of the dll.
+        /// </summary>
+        /// <returns>The current version as a string, or null if an error occurs.</returns>
+        public static string GetCurrentVersion()
+        {
+            try
+            {
+                return CurrentVersion;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+
+        //USAGE
+
+        string result = KneeSurgeryDll.KneeSurgery.GetCurrentVersion()
+```
