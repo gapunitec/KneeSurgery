@@ -259,17 +259,17 @@ namespace KneeSurgeryUI
             if (KneeSurgeryDll.KneeSurgery.AutoInjectionActive)
             {
                 State2.Background = Brushes.Red;
-                InjectButton.IsEnabled = true;
 
                 KneeSurgeryDll.KneeSurgery.AutoInjectionActive = false;
             }
             else
             {
                 State2.Background = Brushes.Green;
-                InjectButton.IsEnabled = false;
 
                 KneeSurgeryDll.KneeSurgery.AutoInjectionActive = true;
             }
+
+            _settings.AutoInjection = KneeSurgeryDll.KneeSurgery.AutoInjectionActive;
         }
 
         private async void Clear(object sender, RoutedEventArgs e)
@@ -399,6 +399,8 @@ namespace KneeSurgeryUI
                 KillRobloxButton.Background = selectedTheme.Background;
                 CleanRobloxButton.Foreground = selectedTheme.Foreground;
                 CleanRobloxButton.Background = selectedTheme.Background;
+                AutoInjectButton.Foreground = selectedTheme.Foreground;
+                AutoInjectButton.Background = selectedTheme.Background;
 
                 _settings.SelectedTheme = selectedTheme;
                 _settings.SetSettings();

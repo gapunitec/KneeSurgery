@@ -8,6 +8,7 @@ namespace KneeSurgeryUI
     {
         public string ExplorerPath { get; set; }
         public string MonacoEditorText { get; set; }
+        public bool AutoInjection { get; set; }
         public Theme SelectedTheme { get; set; }
         public List<Theme> Themes { get; set; }
 
