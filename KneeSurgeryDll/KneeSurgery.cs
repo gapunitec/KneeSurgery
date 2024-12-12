@@ -64,46 +64,37 @@ namespace KneeSurgeryDll
         }
 
         /// <summary>
-        /// Starts a WMI listener for process startup events. If the "RobloxPlayerBeta" process starts,
-        /// it executes the Startup() function and returns its result.
+        /// Starts a WMI event listener that triggers the Startup method whenever the RobloxPlayerBeta process is launched,
+        /// provided that AutoInjectionActive is true.
         /// </summary>
-        /// <returns>
-        /// A Task containing:
-        /// - The result of the Startup() function if the "RobloxPlayerBeta" process is detected.
-        /// - 0 if AutoInjectionActive is false.
-        /// - -1 in case of exceptions.
-        /// </returns>
-        public static Task<int> AutoInjection()
+        /// <returns>1 if the watcher is successfully started, -1 if an error occurs.</returns>
+        public static int AutoInjection()
         {
             try
             {
-                if (AutoInjectionActive == true)
+                WqlEventQuery query = new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace");
+                ManagementEventWatcher watcher = new ManagementEventWatcher(query);
+
+                watcher.EventArrived += (sender, e) =>
                 {
-                    TaskCompletionSource<int> tcs = new TaskCompletionSource<int>();
-                    WqlEventQuery query = new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace");
-                    ManagementEventWatcher watcher = new ManagementEventWatcher(query);
+                    if (!AutoInjectionActive)
+                        return;
 
-                    watcher.EventArrived += (sender, e) =>
+                    string processName = (string)e.NewEvent["ProcessName"];
+
+                    if (processName.Contains("RobloxPlayerBeta"))
                     {
-                        string processName = (string)e.NewEvent["ProcessName"];
+                        Startup();
+                    }
+                };
 
-                        if (processName.Contains("RobloxPlayerBeta"))
-                        {
-                            tcs.TrySetResult(Startup());
-                            watcher.Stop();
-                        }
-                    };
+                watcher.Start();
 
-                    watcher.Start();
-
-                    return tcs.Task;
-                }
-
-                return Task.FromResult(0);
+                return 1;
             }
             catch
             {
-                return Task.FromResult(-1);
+                return -1;
             }
         }
 
