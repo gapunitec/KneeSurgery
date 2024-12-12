@@ -41,6 +41,21 @@ namespace KneeSurgeryUI
 
             ThemeList.SelectedItem = _settings.SelectedTheme.Name;
 
+            if (_settings.AutoInjection)
+            {
+                State2.Background = Brushes.Green;
+                State1.Background = Brushes.Blue;
+                GridLength tmp = InjectColumn.Width;
+                InjectColumn.Width = ExecuteColumn.Width;
+                ExecuteColumn.Width = tmp;
+                InjectButton.IsEnabled = false;
+                ExecuteButton.IsEnabled = true;
+
+                KneeSurgeryDll.KneeSurgery.AutoInjectionActive = true;
+            }
+
+            KneeSurgeryDll.KneeSurgery.AutoInjection();
+
             _ = CheckForUpdatesAsync();
         }
 
