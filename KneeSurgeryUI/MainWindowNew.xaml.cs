@@ -178,20 +178,26 @@ namespace KneeSurgeryUI
 
         private async Task InjectionState()
         {
-            State.Background = Brushes.Green;
+            State1.Background = Brushes.Green;
             GridLength tmp = InjectColumn.Width;
             InjectColumn.Width = ExecuteColumn.Width;
             ExecuteColumn.Width = tmp;
-            InjectButton.IsEnabled = false;
+
+            if (!KneeSurgeryDll.KneeSurgery.AutoInjectionActive)
+                InjectButton.IsEnabled = false;
+
             ExecuteButton.IsEnabled = true;
 
             await Task.Run(() => KneeSurgeryDll.KneeSurgery.GetInjectionState());
 
-            State.Background = Brushes.Red;
+            State1.Background = Brushes.Red;
             tmp = InjectColumn.Width;
             InjectColumn.Width = ExecuteColumn.Width;
             ExecuteColumn.Width = tmp;
-            InjectButton.IsEnabled = true;
+
+            if (!KneeSurgeryDll.KneeSurgery.AutoInjectionActive)
+                InjectButton.IsEnabled = true;
+
             ExecuteButton.IsEnabled = false;
         }
 
@@ -248,6 +254,24 @@ namespace KneeSurgeryUI
             }
         }
 
+        private void AutoInjection(object sender, RoutedEventArgs e)
+        {
+            if (KneeSurgeryDll.KneeSurgery.AutoInjectionActive)
+            {
+                State2.Background = Brushes.Red;
+                InjectButton.IsEnabled = true;
+
+                KneeSurgeryDll.KneeSurgery.AutoInjectionActive = false;
+            }
+            else
+            {
+                State2.Background = Brushes.Green;
+                InjectButton.IsEnabled = false;
+
+                KneeSurgeryDll.KneeSurgery.AutoInjectionActive = true;
+            }
+        }
+
         private async void Clear(object sender, RoutedEventArgs e)
         {
             await MonacoWebView.ExecuteScriptAsync($"window.editor.setValue({JsonSerializer.Serialize("")})");
@@ -263,7 +287,7 @@ namespace KneeSurgeryUI
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Title = "Save",
-                Filter = "Lua Files (*.lua)|*.lua",
+                Filter = "Lua Files (*.lua)|*.lua|Text Files (*.txt)|*.txt",
                 InitialDirectory = AppDomain.CurrentDomain.BaseDirectory
             };
 
@@ -281,7 +305,7 @@ namespace KneeSurgeryUI
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Title = "Open file",
-                Filter = "Lua Files (*.lua)|*.lua",
+                Filter = "Lua Files (*.lua)|*.lua|Text Files (*.txt)|*.txt",
                 Multiselect = false,
                 InitialDirectory = AppDomain.CurrentDomain.BaseDirectory
             };

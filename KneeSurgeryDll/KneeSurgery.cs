@@ -7,7 +7,7 @@ namespace KneeSurgeryDll
 {
     public static class KneeSurgery
     {
-        private const string CurrentVersion = "1.0.12.0";
+        private const string CurrentVersion = "1.0.13.0";
         public static bool AutoInjectionActive { get; set; } = false;
 
         /// <summary>

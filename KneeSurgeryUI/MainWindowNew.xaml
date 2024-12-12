@@ -61,14 +61,15 @@
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="0.5*" />
                 </Grid.ColumnDefinitions>
                 <Button x:Name="InjectButton" Grid.Column="0" Margin="2.5,0,2.5,0" FontSize="9" Click="Startup" Foreground="White" Background="#1f1f1f">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="0.1*" />
+                            <ColumnDefinition Width="0.9*" />
                         </Grid.ColumnDefinitions>
-                        <Border x:Name="State" Grid.Column="0" Height="5" Width="5" Background="Red" CornerRadius="5" />
+                        <Border x:Name="State1" Grid.Column="0" Height="5" Width="5" Background="Red" CornerRadius="5" />
                         <TextBlock Grid.Column="1" Text="Injection" Margin="5,0,0,0" />
                     </Grid>
                 </Button>
@@ -77,6 +78,16 @@
                 <Button x:Name="OpenAutoexecFolderButton" Content="Open Autoexec folder" Grid.Column="3" Margin="2.5,0,2.5,0" FontSize="9" Click="OpenAutoexecFolder" Foreground="White" Background="#1f1f1f" />
                 <Button x:Name="KillRobloxButton" Content="Kill Roblox" Grid.Column="4" Margin="2.5,0,2.5,0" FontSize="9" Click="KillRobloxPlayerBeta" Foreground="White" Background="#1f1f1f" />
                 <Button x:Name="CleanRobloxButton" Content="Clean Roblox" Grid.Column="5" Margin="2.5,0,2.5,0" FontSize="9" Click="CleanRobloxPlayerBeta" Foreground="White" Background="#1f1f1f" />
+                <Button x:Name="AutoInjectButton" Grid.Column="6" Margin="2.5,0,2.5,0" FontSize="9" Click="AutoInjection" Foreground="White" Background="#1f1f1f">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.1*" />
+                            <ColumnDefinition Width="0.9*" />
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="State2" Grid.Column="0" Height="5" Width="5" Background="Red" CornerRadius="5" />
+                        <TextBlock Grid.Column="1" Text="Auto Injection" Margin="5,0,0,0" />
+                    </Grid>
+                </Button>
             </Grid>
         </Grid>
     </Grid>
