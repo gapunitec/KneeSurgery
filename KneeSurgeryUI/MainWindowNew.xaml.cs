@@ -253,12 +253,24 @@ namespace KneeSurgeryUI
             if (KneeSurgeryDll.KneeSurgery.AutoInjectionActive)
             {
                 State2.Background = Brushes.Red;
+                State1.Background = Brushes.Red;
+                GridLength tmp = InjectColumn.Width;
+                InjectColumn.Width = ExecuteColumn.Width;
+                ExecuteColumn.Width = tmp;
+                InjectButton.IsEnabled = true;
+                ExecuteButton.IsEnabled = false;
 
                 KneeSurgeryDll.KneeSurgery.AutoInjectionActive = false;
             }
             else
             {
                 State2.Background = Brushes.Green;
+                State1.Background = Brushes.Blue;
+                GridLength tmp = InjectColumn.Width;
+                InjectColumn.Width = ExecuteColumn.Width;
+                ExecuteColumn.Width = tmp;
+                InjectButton.IsEnabled = false;
+                ExecuteButton.IsEnabled = true;
 
                 KneeSurgeryDll.KneeSurgery.AutoInjectionActive = true;
             }
