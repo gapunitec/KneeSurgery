@@ -1,7 +1,7 @@
 {
     "ExplorerPath": null,
     "MonacoEditorText": null,
-    "AutoInjection": null,
+    "AutoInjection": false,
     "SelectedTheme": {
         "Name": "Dark",
         "Description": "Dark theme",

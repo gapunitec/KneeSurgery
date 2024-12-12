@@ -182,10 +182,7 @@ namespace KneeSurgeryUI
             GridLength tmp = InjectColumn.Width;
             InjectColumn.Width = ExecuteColumn.Width;
             ExecuteColumn.Width = tmp;
-
-            if (!KneeSurgeryDll.KneeSurgery.AutoInjectionActive)
-                InjectButton.IsEnabled = false;
-
+            InjectButton.IsEnabled = false;
             ExecuteButton.IsEnabled = true;
 
             await Task.Run(() => KneeSurgeryDll.KneeSurgery.GetInjectionState());
@@ -194,10 +191,7 @@ namespace KneeSurgeryUI
             tmp = InjectColumn.Width;
             InjectColumn.Width = ExecuteColumn.Width;
             ExecuteColumn.Width = tmp;
-
-            if (!KneeSurgeryDll.KneeSurgery.AutoInjectionActive)
-                InjectButton.IsEnabled = true;
-
+            InjectButton.IsEnabled = true;
             ExecuteButton.IsEnabled = false;
         }
 
@@ -270,6 +264,7 @@ namespace KneeSurgeryUI
             }
 
             _settings.AutoInjection = KneeSurgeryDll.KneeSurgery.AutoInjectionActive;
+            _settings.SetSettings();
         }
 
         private async void Clear(object sender, RoutedEventArgs e)
